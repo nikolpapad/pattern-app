@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pattern Picker</title>
+<style>
+  body{font-family:system-ui;margin:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+  .card{border:1px solid #20c10e;border-radius:12px;padding:12px;cursor:pointer}
+  img{width:100%;border-radius:10px;display:block}
+</style>
+</head>
+<body>
+<h1>Select a pattern</h1>
+<button id="btn" disabled>Generate PDF</button>
+<span id="status"></span>
+<div id="grid" class="grid"></div>
+
+<script>
+let selected=null;
+
+async function load(){
+  const res = await fetch("http://127.0.0.1:8000/api/patterns");
+  const patterns = await res.json();
+  const grid = document.getElementById("grid");
+
+  patterns.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<img src="http://127.0.0.1:8000${p.imageUrl}"><div>${p.title}</div>`;
+    card.onclick=()=>{ selected=p.id; document.getElementById("btn").disabled=false; };
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById("btn").onclick = async ()=>{
+  const status=document.getElementById("status");
+  status.textContent=" Generating…";
+  const res=await fetch("http://127.0.0.1:8000/api/generate",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({pattern_id:selected})
+  });
+  const data=await res.json();
+  window.location.href = "http://127.0.0.1:8000" + data.downloadUrl;
+  status.textContent="";
+};
+
+load();
+</script>
+</body>
+</html>
