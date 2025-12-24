@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+opencv-python
+numpy
+pillow
+pymupdf
+reportlab
+tqdm
