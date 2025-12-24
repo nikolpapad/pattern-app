@@ -6,4 +6,3 @@ class Settings(BaseSettings):
     PATTERN_DIR: str = "assets/patterns"
 
 settings = Settings()
-
