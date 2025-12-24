@@ -1,3 +1,0 @@
-[submodule "apps/api/app/grid_extraction"]
-	path = apps/api/app/grid_extraction
-	url = https://github.com/nikolpapad/grid_extraction.git
